@@ -5,8 +5,9 @@ public enum Item {
     //enumerating items
     HealthPotion("Health Potion", 10, "Heals 50 HP"),
     Super_Potion("Super Potion", 50, "Heals 100 HP"),
+    ManaPotion("Mana Potion", 20, "Restores 50 MP"),
     Revive("Revive", 150, "Revives dead monster with 50% HP"),
-    Monster_Trap("Trap", 15, "Captures a monster with <=30% HP");
+    MonsterTrap("Trap", 15, "Captures a monster with <=30% HP");
 
     private final String name;
     private final int price;
