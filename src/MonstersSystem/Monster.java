@@ -66,6 +66,17 @@ public abstract class Monster {
         if (maxHP <= 0) throw new IllegalArgumentException("Max HP must be positive");
         this.maxHP = maxHP;
     }
+    
+    //fixed mana setter
+    public void setMana(int mana) {
+        if (mana < 0) {
+            mana = 0;
+        } else if (mana > this.maxMana) {
+            mana = this.maxMana;
+        }
+        this.Mana = mana;
+    }
+
 
     private void setMaxMana(int maxMana) {
         if (maxMana < 0) throw new IllegalArgumentException("Max mana cannot be negative");
@@ -110,7 +121,7 @@ public abstract class Monster {
     protected int calculateDamage(Monster target) {
         int baseDamage = this.attackDamage;
         if (target.getType().isWeakTo(this.Type)) {
-            return (int)(baseDamage * 1.3);
+            return (int)(baseDamage * 1.5); //-> changed from 1.3 to 1.5 for more impact
         }
         return baseDamage;
     }
@@ -153,14 +164,15 @@ public abstract class Monster {
         }
     }
 
-    //Formatting override for proper display
+    //Formatting override for proper display -> fixed to show all stats :)))DDDDDDD
     @Override
     public String toString() {
-        return String.format("%s - HP: %d/%d", Name, currentHP, maxHP);
+        return String.format("%s (%s) - HP: %d/%d | Mana: %d/%d | ATK: %d", 
+            this.Name, this.Type, this.currentHP, this.maxHP, this.Mana, this.maxMana, this.attackDamage);
     }
 
     public String toCSV() {
         return String.format("%s,%s,%d,%d,%d,%d,%d",
-            getClass().getSimpleName(), Name, currentHP, maxHP, Mana, maxMana, attackDamage);
+            getClass().getSimpleName(), this.Name, this.currentHP, this.maxHP, this.Mana, this.maxMana, this.attackDamage);
     }
 }

@@ -1,0 +1,291 @@
+# Pokeright_me
+A turn-based monster battle game that feels like Pokemon, developed in Java with OOP.
+
+## Description
+This is a turn-based combat game where you play as a Monster Trainer who assembles a team of elemental monsters to battle wild monsters.
+
+---------------------------------------------------------------------------------------------------------
+
+## Main Features
+### Core Gameplay
+- Turn-based combat system - `Strategic battles against wild monsters`
+- Monster team management - `Build and customize your team (up to unlimited monsters)`
+- Type effectiveness system - `Water > Fire > Plant > Water (1.5x damage multiplier)`
+- Credits economy - `Earn credits by defeating monsters, spend them in the shop`
+- Save/Load system - `CSV-based persistence`
+### Monster System
+- Three elemental types: `Water, Fire, Plant`
+- Monster stats: `HP, Mana, Attack Damage (mana non used yet sadly)`
+- Status tracking: `Alive/Dead status, capture conditions (≤30% HP)`
+- Custom monster creation - `Create your own Monster (name, type)`
+- Random generation - `Random stats for each monster`
+### Inventory & Items
+- Health Potion (10 credits) - `Heals 50 HP`
+- Super Potion (50 credits) - `Heals 100 HP ` 
+- Revive (150 credits) - `Revives dead monsters with 50% HP`
+- Mana Potion (20 credits) - `Restores 50 Mana`
+- Monster Trap (15 credits) - `Captures weaknd monsters (≤30% HP, 70% success rate)`
+### Shop System
+- Item purchase with credits
+- Pricing System
+- Bulk buying support
+
+---------------------------------------------------------------------------------------------------------
+## 🏗️ Technical Architecture
+### Object-Oriented Design
+
+`Inheritance Hierarchy:`
+Monster (abstract) -> parent
+├── WaterMonster -> children
+├── FireMonster
+└── PlantMonster
+
+`Key Design Patterns:`
+- `Encapsulation` - All monster attributes are private with controlled access
+- `Polymorphism` - Damage calculation based on monster types
+- `Abstraction` - Abstract Monster class prevents direct instantiation
+- `Composition` - Team has-a Inventory, has-a List<Monster>
+### Data Structures
+- `ArrayList<Monster>` - Dynamic team size (no fixed limit)
+- `HashMap<Item, Integer>` - inventory lookup by item name
+- `Enum` - Type-safe monster types and items
+### Exception Handling
+- `GameException` - Custom exception for error handling
+- `Try-catch blocks` - Prevents crashes from invalid user input
+- `Validation` - All setter methods validate input
+### Game Rules Enforcement
+- Cannot attack if monster is dead  
+- Cannot attack a dead target  
+- Cannot heal at max HP  
+- Cannot capture monsters with >30% HP  
+- All illegal actions throw GameException  
+
+---------------------------------------------------------------------------------------------------------
+
+## How to Play
+### Starting the Game
+1. Launch: Run `Main.java`
+2. New Game: Enter team name → Receive 3 random starter monsters
+3. Load Game: Continue from your last save
+### Game Menu Options
+`=== GAME MENU ===`
+1. View Team         - See monster stats, credits, inventory
+2. Battle Wild Monster - Enter combat
+3. Use Item          - Heal/revive monsters outside battle
+4. Shop              - Buy items with credits
+5. Create Custom Monster - Design your own monster
+6. Save Game         - Save progress to savegame.csv
+7. Return to Main Menu
+
+### Battle Actions
+`During combat:`
+- Attack - Deal damage (shows "super effective" for type advantage)
+- Use Item - Heal, revive, or restore mana mid-battle
+- Switch Monster - Change active fighter
+- Try to Capture - Attempt to catch wild monster (needs ≤30% HP + Monster Trap)
+- Run Away - Escape battle
+### Type Effectiveness Chart
+- Water > Fire -> 1.5x dmg
+- Fire > Plant -> 1.5x dmg
+- Plant > Water -> 1.5x dmg
+
+---------------------------------------------------------------------------------------------------------
+
+## Monster Stats Example
+Squirty (water) - HP: 112/120 | Mana: 65/70 | ATK: 28
+Infento (fire) - HP: 95/105 | Mana: 58/62 | ATK: 22
+Flopa (plant) - HP: 118/118 | Mana: 70/75 | ATK: 30
+`Stat Ranges:`
+- HP: 100-120 (custom monsters: 100-135)
+- Mana: 50-70 (custom monsters: 50-85)
+- Attack: 15-30 (custom monsters: 15-40)
+
+---------------------------------------------------------------------------------------------------------
+
+## Save System
+File Format: `savegame.csv`
+
+`Saved Data:`
+- Team name and credits
+- All monsters
+- Inventory
+
+`Example:`
+csv
+TEAM,MyTeam,750
+WaterMonster,Squirty,95,120,60,70,28
+FireMonster,Infento,0,105,0,62,22
+INVENTORY,HealthPotion,3;MonsterTrap,7;
+
+
+---------------------------------------------------------------------------------------------------------
+
+## Installation & Execution
+
+### Prerequisites
+- Java JDK(Temurin Used) 8 or higher
+- Terminal
+## Go to project Directory
+cd path/to/Pokeright_me
+## Compile all files
+javac *.java
+## Run
+java Main
+
+---------------------------------------------------------------------------------------------------------
+
+### Project Structure
+JavaArena/
+├── Main.java
+├── GameMechanics/
+│   ├── BattleSystem.java
+│   ├── SaveLoadSystem.java
+│   └── Team.java
+├── MonstersSystem/
+│   ├── Monster.java (abstract for safety)
+│   ├── MonsterType.java (enum)
+│   └── BabyMaker.java (monster Factory)
+├── MonsterTypes/
+│   ├── WaterMonster.java
+│   ├── FireMonster.java
+│   └── PlantMonster.java
+├── Items/
+│   └── Item.java (enum)
+├── Utility/
+│   ├── GameException.java
+│   ├── Inventory.java
+│   └── Shop.java
+└── savegame.csv (generated after savegame)
+
+---------------------------------------------------------------------------------------------------------
+
+## Gameplay Console Output
+### Main Menu
++-----------------------------------+
+|             WELCOME!              |
++-----------------------------------+
+=== MAIN MENU ===
+1. New Game
+2. Load Game
+3. Exit
+Choose an option: 
+### Team View
+=== TEAM: MyTeam ===
+Credits: 500
+
+Monsters:
+1. Squirty (water) - HP: 95/120 | Mana: 60/70 | ATK: 28 [Alive]
+2. Infento (fire) - HP: 0/105 | Mana: 0/62 | ATK: 22 [Dead]
+3. Flopa (plant) - HP: 118/118 | Mana: 70/75 | ATK: 30 [Alive]
+
+=== INVENTORY ===
+Health Potion x3
+Trap x7
+
+### Battle Scene
+A wild Magonda appeared!
+Magonda (fire) - HP: 108/108 | Mana: 55/60 | ATK: 25
+
+--- Your turn ---
+Current monster: Squirty (water) - HP: 95/120 | Mana: 60/70 | ATK: 28
+Wild Magonda (fire) - HP: 108/108 | Mana: 55/60 | ATK: 25
+
+1. Attack
+2. Use Item
+3. Switch Monster
+4. Try to Capture
+5. Run Away
+Choose an action: 1
+
+It's super effective!
+Squirty dealt 42 damage!
+
+Wild Magonda attacked for 25 damage!
+
+### Shop Interface
+=== SHOP ===
+Your credits: 500
+
+1. Health Potion - 10 credits
+2. Super Potion - 50 credits
+3. Revive - 150 credits
+4. Mana Potion - 20 credits
+5. Trap - 15 credits
+6. Exit Shop
+Choose an item to buy: 
+
+---------------------------------------------------------------------------------------------------------
+
+## Special Features & Particularities
+### Unique Design Choices
+1. No Monster Limit
+2. Custom Error Messages - Yes i will shout at you
+3. Dynamic Stats - Every monster has randomized stats
+4. Custom Monster Creator - Name and Type
+5. Transparent Calculations - Exact numbers for everything visible
+6. CSV Persistence - Editable SaveFiles
+### Balance & Strategy
+- Type advantage - 50% dmg boost
+- Resource management - credits
+- Capture mechanics - Capture = Monster, Kill = Credits
+- Team composition - Balance your team with different types :D
+
+---------------------------------------------------------------------------------------------------------
+
+## Technical Specifications
+### OOP Applied
+- Encapsulation - Private fields, controlled access  
+- Inheritance - Monster hierarchy  
+- Polymorphism - Type-based damage calculation  
+- Abstraction - Abstract Monster class  
+- Composition - Team contains Inventory & Monsters  
+### Error Handling
+- Never crashes on invalid input
+- Custom GameException for violations and you also get verbally violated
+- Validation in all setter methods
+- Safe file with try-catch
+
+---------------------------------------------------------------------------------------------------------
+
+## Game Rules Summary
+### Combat Rules
+- Turn-based: Player acts → Enemy acts → Repeat
+- dead monsters cannot act or be targeted
+- Damage is: attackDamage * typeMultiplier
+### Healing Rules
+- Cannot heal monsters at max HP (throws exception)
+- Cannot heal dead monsters (use Revive first)
+- Revive: Restores 50% max HP (bugged a bit on %hp restore)
+### Economic Rules
+- Start with 500 credits
+- Earn 50-100 credits per battle victory
+- Items cost 10-150 credits
+- No credit limit
+
+---------------------------------------------------------------------------------------------------------
+### Requirements Done
+- Multiple monster species with types  
+- Monster characteristics (HP, Mana, Attack)  
+- Rock-Paper-Scissors type system (2x damage)  
+- death mechanics (0 HP = cannot act)  
+- Player team with 3 starting monsters  
+- Inventory with consumables  
+- Credits system  
+- Combat against random monsters  
+- Item usage system  
+- Save/Load functionality  
+- Console-based menu interface  
+- Shop for purchasing items  
+- OOP hierarchy (no code duplication)  
+- Abstract Monster class (cannot instantiate generic)  
+- Encapsulation (private attributes)  
+- Polymorphic damage calculation  
+- Dynamic team size (ArrayList)  
+- HashMap inventory (inventory lookup)  
+- Exception handling (no crashes)  
+- CSV persistence (exact game state)  
+
+---------------------------------------------------------------------------------------------------------
+I HEREBY SUMMON NINTENDO THE FINAL BOSS
+
+SUE ME NINTENDO ! :D

@@ -53,12 +53,24 @@ public class Team {
         this.credits -= amount;
     }
 
+    //updated to clearer method
     public boolean hasAliveMonster() {
-        return monsters.stream().anyMatch(Monster::isAlive);
+        for (Monster m : monsters) {
+            if (m.isAlive()) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    //changed to clearer method
     public Monster getFirstAliveMonster() {
-        return monsters.stream().filter(Monster::isAlive).findFirst().orElse(null);
+        for (Monster m : monsters) {
+            if (m.isAlive()) {
+                return m;
+            }
+        }
+        return null;
     }
 
     public void displayTeam() {
@@ -74,30 +86,39 @@ public class Team {
 
     public void usePotion(int monsterIndex, Item potion) throws GameException {
         if (monsterIndex < 0 || monsterIndex >= monsters.size()) {
-            throw new GameException("Bad monster selection");
+            throw new GameException("Monster index out of bounds");
         }
-
-        Monster monster = monsters.get(monsterIndex);
-
+        Monster m = monsters.get(monsterIndex);
+        
         if (potion == Item.Revive) {
-            if (monster.isAlive()) {
+            if (m.isAlive()) {
                 throw new GameException("What you want to revive his apetite? He's not dead!");
             }
             inventory.useItem(potion);
-            monster.revive();
-            System.out.println(monster.getName() + " 's soul was resucked into his body!");
+            m.revive();
+            System.out.println(m.getName() + " 's soul was resucked into his body!");
             return;
         }
 
-        if (potion == Item.HealthPotion || potion == Item.Super_Potion) {
-            if (monster.isDead()) {
+        if (potion == Item.HealthPotion || potion == Item.SuperPotion) {
+            if (m.isDead()) {
                 throw new GameException("Have you ever put a band-aid on a dead person?");
             }
 
             int healAmount = (potion == Item.HealthPotion) ? 50 : 100;
             inventory.useItem(potion);
-            monster.heal(healAmount);
-            System.out.println(monster.getName() + " was healed by " + healAmount + " HP!");
+            m.heal(healAmount);
+            System.out.println(m.getName() + " was healed by " + healAmount + " HP!");
+            return;
+        }
+
+        if (potion == Item.ManaPotion) {
+            if (m.isDead()) {
+                throw new GameException("Dead monsters don't need mana!");
+            }
+            inventory.useItem(potion);
+            m.restoreMana(50);
+            System.out.println(m.getName() + " restored 50 mana!");
             return;
         }
 

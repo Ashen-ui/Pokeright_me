@@ -20,16 +20,17 @@ public class Shop {
             System.out.println("\n=== SHOP ===");
             System.out.println("Your credits: " + team.getCredits());
             System.out.println("\n1. " + Item.HealthPotion.getItemName() + " - " + Item.HealthPotion.getPrice() + " credits");
-            System.out.println("2. " + Item.Super_Potion.getItemName() + " - " + Item.Super_Potion.getPrice() + " credits");
+            System.out.println("2. " + Item.SuperPotion.getItemName() + " - " + Item.SuperPotion.getPrice() + " credits");
             System.out.println("3. " + Item.Revive.getItemName() + " - " + Item.Revive.getPrice() + " credits");
-            System.out.println("4. " + Item.MonsterTrap.getItemName() + " - " + Item.MonsterTrap.getPrice() + " credits");
-            System.out.println("5. Exit Shop");
+            System.out.println("4. " + Item.ManaPotion.getItemName() + " - " + Item.ManaPotion.getPrice() + " credits");
+            System.out.println("5. " + Item.MonsterTrap.getItemName() + " - " + Item.MonsterTrap.getPrice() + " credits");
+            System.out.println("6. Exit Shop");
             System.out.print("Choose an item to buy: ");
 
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
-                if (choice == 5) {
+                if (choice == 6) {
                     shopping = false;
                     continue;
                 }
@@ -38,11 +39,13 @@ public class Shop {
                 switch (choice) {
                     case 1: item = Item.HealthPotion; 
                         break;
-                    case 2: item = Item.Super_Potion; 
+                    case 2: item = Item.SuperPotion; 
                         break;
                     case 3: item = Item.Revive; 
                         break;
-                    case 4: item = Item.MonsterTrap; 
+                    case 4: item = Item.ManaPotion; 
+                        break;
+                    case 5: item = Item.MonsterTrap; 
                         break;
                     default:
                         System.out.println("Invalid choice!");
@@ -68,7 +71,7 @@ public class Shop {
                 }
 
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input! Please enter a number.");
+                System.out.println("Try inputting a number next time.");
             }
         }
     }
